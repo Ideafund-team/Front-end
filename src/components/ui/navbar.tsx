@@ -28,11 +28,11 @@ export default function Navbar() {
           </ul>
         </div>
         <div className="flex gap-3 items-center max-md:hidden">
-          <Link href={'/daftar'} className={clsx(buttonVariants({ variant: 'secondary' }), 'w-24')}>
+          <Link href={'/user/daftar'} className={clsx(buttonVariants({ variant: 'secondary' }), 'w-24')}>
             Daftar
           </Link>
 
-          <Link href={'/masuk'}>
+          <Link href={'/user/masuk'}>
             <Button className="bg-blue-600 hover:bg-blue-500 cursor-pointer w-24">Masuk</Button>
           </Link>
         </div>
@@ -64,11 +64,11 @@ export default function Navbar() {
               </div>
               <SheetFooter>
                 <div className="grid grid-cols-2 gap-3 items-center">
-                  <Link href={'/daftar'} className={clsx(buttonVariants({ variant: 'secondary' }), '')}>
+                  <Link href={'/user/daftar'} className={clsx(buttonVariants({ variant: 'secondary' }), '')}>
                     Daftar
                   </Link>
 
-                  <Link href={'/masuk'} className="w-full">
+                  <Link href={'/user/masuk'} className="w-full">
                     <Button className="bg-blue-600 hover:bg-blue-500 cursor-pointer w-full">Masuk</Button>
                   </Link>
                 </div>
