@@ -27,7 +27,7 @@ export default function page() {
         {ideas.map((ide, index) => (
           <div key={index} className="border rounded-lg w-full p-4 mt-4">
             <div className="relative">
-              <Image src={ide.image} width={100} height={100} alt={ide.title} className="w-full rounded-md" />
+              <Image src={ide.image} width={100} height={100} alt={ide.title} className="w-full rounded-md" unoptimized />
               <div className="absolute top-2 right-2 bg-white px-3 py-1 rounded-full flex items-center gap-2 shadow">
                 <span className={`h-2 w-2 rounded-full ${ide.status === 'Dibuka' ? 'bg-green-500' : 'bg-red-500'}`}></span>
                 <p className="text-xs font-medium">{ide.status}</p>
