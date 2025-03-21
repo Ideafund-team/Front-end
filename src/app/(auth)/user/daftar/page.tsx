@@ -3,20 +3,21 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { LoaderCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 type User = {
   email: string;
   password: string;
-  confirmPassword: string;
+  confirm_password: string;
   nama: string;
   alamat: string;
-  noHp: string;
-  fotoProfil: FileList;
-  ktp: FileList;
+  no_hp: string;
+  foto_profil: FileList;
+  foto_ktp: FileList;
 };
 
 export default function RegisterPage() {
@@ -25,17 +26,44 @@ export default function RegisterPage() {
     handleSubmit,
     watch,
     trigger,
-    formState: { errors },
+    formState: { errors, isLoading },
   } = useForm<User>({ mode: 'onChange' });
-  const [showPassword, setShowPassword] = useState(false);
-  const [step, setStep] = useState(1);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [step, setStep] = React.useState(1);
+  const [message, setMessage] = React.useState('');
 
-  const onSubmit: SubmitHandler<User> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<User> = async (data) => {
+    const formData = new FormData();
+
+    formData.append('email', data.email);
+    formData.append('password', data.password);
+    formData.append('confirm_password', data.confirm_password);
+    formData.append('nama', data.nama);
+    formData.append('alamat', data.alamat);
+    formData.append('no_hp', data.no_hp);
+    formData.append('foto_ktp', data.foto_ktp[0]);
+    formData.append('foto_profil', data.foto_profil[0]);
+
+    try {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/auth/register', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await response.json();
+      console.log('Response:', result);
+      setMessage(result.message);
+
+      if (response.ok) {
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setMessage('Terjadi kesalahan saat mendaftar');
+    }
   };
 
   const handleNext = async () => {
-    const isValid = await trigger(['email', 'password', 'confirmPassword']);
+    const isValid = await trigger(['email', 'password', 'confirm_password']);
     if (isValid) {
       setStep(2);
     }
@@ -79,12 +107,12 @@ export default function RegisterPage() {
 
                 <Label className="mt-5 mb-3 text-base">Konfirmasi Password</Label>
                 <Input
-                  {...register('confirmPassword', { required: 'Konfirmasi password wajib diisi', validate: (value) => value === watch('password') || 'Password tidak cocok' })}
+                  {...register('confirm_password', { required: 'Konfirmasi password wajib diisi', validate: (value) => value === watch('password') || 'Password tidak cocok' })}
                   placeholder="******"
                   type={showPassword ? 'text' : 'password'}
-                  aria-invalid={errors.confirmPassword && 'true'}
+                  aria-invalid={errors.confirm_password && 'true'}
                 />
-                {errors.confirmPassword && <p className="text-xs text-red-500 mt-3">{errors.confirmPassword.message}</p>}
+                {errors.confirm_password && <p className="text-xs text-red-500 mt-3">{errors.confirm_password.message}</p>}
 
                 <div className="flex gap-3 mt-1 items-center">
                   <Input type="checkbox" onChange={(e) => setShowPassword(e.target.checked)} className="w-max" />
@@ -112,21 +140,21 @@ export default function RegisterPage() {
                   </div>
                   <div className="w-full">
                     <Label className="mb-3 text-base">Nomor Handphone</Label>
-                    <Input {...register('noHp', { required: 'No Handphone wajib diisi', minLength: { value: 12, message: 'Nomor Handphone tidak valid' } })} placeholder="Nomor Handphone" type="tel" aria-invalid={errors.noHp && 'true'} />
-                    {errors.noHp && <p className="text-xs text-red-500 mt-3">{errors.noHp.message}</p>}
+                    <Input {...register('no_hp', { required: 'No Handphone wajib diisi', minLength: { value: 12, message: 'Nomor Handphone tidak valid' } })} placeholder="Nomor Handphone" type="tel" aria-invalid={errors.no_hp && 'true'} />
+                    {errors.no_hp && <p className="text-xs text-red-500 mt-3">{errors.no_hp.message}</p>}
                   </div>
                 </div>
 
                 <div className="flex gap-4 max-md:flex-col max-md:gap-0">
                   <div>
                     <Label className="mt-5 mb-3 text-base">Foto Profil</Label>
-                    <Input {...register('fotoProfil', { required: 'Foto profil wajib diisi' })} type="file" aria-invalid={errors.fotoProfil && 'true'} />
-                    {errors.fotoProfil && <p className="text-xs text-red-500 mt-3">{errors.fotoProfil.message}</p>}
+                    <Input {...register('foto_profil', { required: 'Foto profil wajib diisi' })} type="file" aria-invalid={errors.foto_profil && 'true'} accept="image/*" />
+                    {errors.foto_profil && <p className="text-xs text-red-500 mt-3">{errors.foto_profil.message}</p>}
                   </div>
                   <div>
                     <Label className="mt-5 mb-3 text-base">Foto KTP</Label>
-                    <Input {...register('ktp', { required: 'Foto KTP wajib diisi' })} type="file" aria-invalid={errors.ktp && 'true'} />
-                    {errors.ktp && <p className="text-xs text-red-500 mt-3">{errors.ktp.message}</p>}
+                    <Input {...register('foto_ktp', { required: 'Foto KTP wajib diisi' })} type="file" aria-invalid={errors.foto_ktp && 'true'} accept="image/*" />
+                    {errors.foto_ktp && <p className="text-xs text-red-500 mt-3">{errors.foto_ktp.message}</p>}
                   </div>
                 </div>
                 <p className="text-xs mt-5">
@@ -140,12 +168,19 @@ export default function RegisterPage() {
                   </Link>{' '}
                   yang berlaku dari Ideafund
                 </p>
+                <p className="text-xs text-red-500 mt-3">{message}</p>
                 <div className="flex gap-4 max-md:flex-col-reverse max-md:w-full w-[80%] mt-6">
                   <Button className="w-[60%] max-md:w-full cursor-pointer" variant={'secondary'} type="button" onClick={() => setStep(1)}>
                     Kembali
                   </Button>
-                  <Button type="submit" className="bg-blue-600  max-md:w-full hover:bg-blue-500 w-[60%] cursor-pointer">
-                    Daftar
+                  <Button type="submit" disabled={isLoading} className="bg-blue-600  max-md:w-full hover:bg-blue-500 w-[60%] cursor-pointer">
+                    {isLoading ? (
+                      <span>
+                        <LoaderCircle className="animate-spin" /> Mohon tunggu...
+                      </span>
+                    ) : (
+                      'Daftar'
+                    )}
                   </Button>
                 </div>
               </>
@@ -159,10 +194,27 @@ export default function RegisterPage() {
             </Link>
           </p>
         </div>
-        <div className="w-full bg-blue-600 max-md:hidden"></div>
+        <div className="w-full bg-blue-600 max-md:hidden flex flex-col px-4 py-6 h-screen">
+          <Link href={'/'} className="logo flex gap-3 items-center mb-6">
+            <Image src={'/logo-white.svg'} width={40} height={40} alt="Logo" />
+            <p className="font-medium text-white">Ideafund</p>
+          </Link>
+          <div className="flex flex-col justify-center px-4 py-6 h-full">
+            <div className="">
+              <p className="text-white italic text-xl">
+                &quot;Ideafund benar-benar membantu saya mendapatkan pendanaan untuk bisnis makanan saya. Prosesnya mudah, dan saya bisa terhubung langsung dengan investor yang percaya dengan visi saya!&quot;
+              </p>
+              <div className="flex gap-3 mt-6">
+                <Image src="/avatar.jpg" width={50} height={50} alt="profil-picture" className="rounded-full w-10 h-10 object-cover" />
+                <div>
+                  <p className="text-white font-semibold tex-lg">Ahmad Afwan</p>
+                  <p className="text-xs text-slate-200">pengguna ideafund</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
-
