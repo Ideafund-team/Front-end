@@ -92,10 +92,10 @@ const menus = [
   },
   {
     label: 'Tentang Kami',
-    link: 'tentang',
+    link: '/tentang',
   },
   {
-    label: 'Kebijakan Privasi',
-    link: '/kebijakan-privasi',
+    label: 'Syarat dan Privasi',
+    link: '/syarat-dan-privasi',
   },
 ];
