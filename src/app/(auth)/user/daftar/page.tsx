@@ -6,8 +6,10 @@ import { Label } from '@/components/ui/label';
 import { LoaderCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 type User = {
   email: string;
@@ -26,11 +28,13 @@ export default function RegisterPage() {
     handleSubmit,
     watch,
     trigger,
-    formState: { errors, isLoading },
+    formState: { errors },
   } = useForm<User>({ mode: 'onChange' });
   const [showPassword, setShowPassword] = React.useState(false);
   const [step, setStep] = React.useState(1);
   const [message, setMessage] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<User> = async (data) => {
     const formData = new FormData();
@@ -45,6 +49,7 @@ export default function RegisterPage() {
     formData.append('foto_profil', data.foto_profil[0]);
 
     try {
+      setIsLoading(true);
       const response = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/auth/register', {
         method: 'POST',
         body: formData,
@@ -53,12 +58,13 @@ export default function RegisterPage() {
       const result = await response.json();
       console.log('Response:', result);
       setMessage(result.message);
-
-      if (response.ok) {
-      }
+      toast.success('Berhasil mendaftar!');
+      router.push('/user/masuk');
     } catch (error) {
       console.error('Error:', error);
       setMessage('Terjadi kesalahan saat mendaftar');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -175,7 +181,7 @@ export default function RegisterPage() {
                   </Button>
                   <Button type="submit" disabled={isLoading} className="bg-blue-600  max-md:w-full hover:bg-blue-500 w-[60%] cursor-pointer">
                     {isLoading ? (
-                      <span>
+                      <span className="flex items-center gap-2">
                         <LoaderCircle className="animate-spin" /> Mohon tunggu...
                       </span>
                     ) : (

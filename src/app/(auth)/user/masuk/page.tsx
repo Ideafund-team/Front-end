@@ -7,8 +7,11 @@ import { Label } from '@/components/ui/label';
 import { LoaderCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import Cookies from 'js-cookie';
 
 type User = {
   email: string;
@@ -19,14 +22,17 @@ export default function page() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isLoading },
+    formState: { errors },
   } = useForm<User>();
   const [showPassword, setShowPassword] = React.useState(false);
   const [message, setMessage] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false);
+  const router = useRouter();
 
   const onSubmit: SubmitHandler<User> = async (data) => {
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/auth/login', {
+      setIsLoading(true);
+      const loginResponse = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -34,11 +40,34 @@ export default function page() {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
-      console.log('Response:', result);
-      setMessage(result.message);
+      const loginResult = await loginResponse.json();
+      console.log('Login Response:', loginResult);
+      setMessage(loginResult.message);
+
+      if (loginResult.token && loginResult.id) {
+        const userResponse = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + `/user/${loginResult.id}`, {
+          method: 'GET',
+        });
+
+        const userResult = await userResponse.json();
+        console.log('User Response:', userResult);
+
+        if (userResult.is_active) {
+          toast.success('Berhasil masuk ke akun anda!');
+          Cookies.set('token', loginResult.token, { expires: 7 });
+          Cookies.set('userId', loginResult.id, { expires: 7 });
+          router.push('/user/dashboard');
+        } else {
+          toast.info('Maaf, akun anda belum aktif. Data anda sedang kami review, mohon untuk menunggu!');
+        }
+      } else {
+        toast.error('Login gagal. Silakan periksa kembali email dan password anda.');
+      }
     } catch (error) {
       console.error('Error:', error);
+      toast.error('Terjadi kesalahan. Silakan coba lagi.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -82,7 +111,7 @@ export default function page() {
               <p className="text-xs text-red-500">{message}</p>
               <Button type="submit" className="bg-blue-600 hover:bg-blue-500 w-full mt-4 cursor-pointer" size={'lg'} disabled={isLoading}>
                 {isLoading ? (
-                  <span>
+                  <span className="flex items-center gap-2">
                     <LoaderCircle className="animate-spin" /> Mohon tunggu...
                   </span>
                 ) : (
