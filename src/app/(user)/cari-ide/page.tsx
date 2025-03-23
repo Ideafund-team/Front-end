@@ -1,11 +1,38 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { fetcher } from '@/lib/fetcher';
 import { ChevronRight, HandCoins, MapPin, SearchIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import useSWR from 'swr';
 
-export default function page() {
+type Idea = {
+  id: string;
+  title: string;
+  summary: string;
+  investment_amount: number;
+  location: string;
+  description: string;
+  image: string;
+  status: string;
+};
+
+export default function Page() {
+  const [searchTerm, setSearchTerm] = React.useState('');
+
+  const { data: ideas } = useSWR(process.env.NEXT_PUBLIC_API_BASE_URL + '/idea', fetcher);
+
+  const [filteredIdeas, setFilteredIdeas] = React.useState(ideas);
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+    const filtered = ideas?.filter((idea: Idea) => idea.title.toLowerCase().includes(value));
+    setFilteredIdeas(filtered);
+  };
+
   return (
     <div className="h-screen max-w-6xl mx-auto px-4">
       <div className="mt-10 w-full text-center">
@@ -19,12 +46,12 @@ export default function page() {
           <div className="absolute left-3 top-4.5 h-4 w-4 text-muted-foreground">
             <SearchIcon className="h-4 w-4" />
           </div>
-          <Input id="search" type="search" placeholder="Cari Ide Usaha..." className="w-full bg-background pl-8 py-6 rounded-full" />
+          <Input id="search" value={searchTerm} onChange={handleSearch} type="search" placeholder="Cari Ide Usaha..." className="w-full bg-background pl-8 py-6 rounded-full" />
         </div>
       </div>
 
       <section className="grid py-10 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-        {ideas.map((ide, index) => (
+        {filteredIdeas?.map((ide: Idea, index: number) => (
           <div key={index} className="border rounded-lg w-full p-4 mt-4">
             <div className="relative">
               <Image src={ide.image} width={100} height={100} alt={ide.title} className="w-full rounded-md" unoptimized />
@@ -35,17 +62,17 @@ export default function page() {
             </div>
             <p className="text-xl font-semibold mt-3">{ide.title}</p>
             <div className="flex gap-2 mt-2">
-              {ide.category.map((category, index) => (
+              {/* {ide.category.map((category, index) => (
                 <p key={index} className="text-blue-600 bg-blue-600/10 px-4 py-1 rounded-full text-xs">
                   {category}
                 </p>
-              ))}
+              ))} */}
             </div>
 
             <p className="text-sm my-4">{ide.summary}</p>
             <div className="flex gap-2 items-center">
               <p className="text-green-500 bg-green-500/10 flex gap-2 items-center w-max px-4 py-1 rounded-full text-sm">
-                <HandCoins size={18} /> {ide.investmentAmount}
+                <HandCoins size={18} /> {ide.investment_amount.toLocaleString('id-ID')}
               </p>
               <p className="text-red-600 bg-red-600/10 flex gap-2 items-center w-max px-4 py-1 rounded-full text-sm">
                 <MapPin size={16} /> {ide.location}
@@ -62,45 +89,3 @@ export default function page() {
     </div>
   );
 }
-
-const ideas = [
-  {
-    id: '1',
-    title: 'Contoh Ide Usaha',
-    image: '/thumbniel.png',
-    category: ['Elektroknik', 'Pendidikan'],
-    location: 'Jakarta',
-    status: 'Dibuka',
-    investmentAmount: 'Rp. 10.000.000',
-    investmentAvalible: 'Rp. 5.000.000',
-    summary: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro nulla nostrum cumque vitae rem nihil eos at corrupti praesentium non.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro nulla nostrum cumque vitae rem nihil eos at corrupti praesentium non. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, sit quibusdam. Quo eum atque blanditiis possimus, neque necessitatibus esse non quis rerum reiciendis nemo, enim nesciunt deserunt corrupti vero perferendis adipisci ipsum? Pariatur similique odio quidem qui. Beatae iure, in a consectetur fuga eveniet, nam quibusdam voluptas praesentium, aut voluptatum magni maiores rem architecto doloribus earum vero. Recusandae obcaecati minima, officia omnis, cum iste culpa animi, incidunt nobis perspiciatis fugiat laboriosam. Voluptates, ea. Ipsum repellat libero nesciunt mollitia obcaecati voluptatibus reiciendis ipsa, sunt blanditiis dolorum provident numquam rerum laboriosam magnam eligendi. Possimus quas inventore, provident eligendi fuga repellat quo soluta?',
-  },
-  {
-    id: '2',
-    title: 'Contoh Ide Usaha',
-    image: '/thumbniel.png',
-    category: ['Elektroknik', 'Pendidikan'],
-    location: 'Jakarta',
-    status: 'Ditutup',
-    investmentAmount: 'Rp. 10.000.000',
-    investmentAvalible: 'Rp. 5.000.000',
-    summary: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro nulla nostrum cumque vitae rem nihil eos at corrupti praesentium non.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro nulla nostrum cumque vitae rem nihil eos at corrupti praesentium non. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, sit quibusdam. Quo eum atque blanditiis possimus, neque necessitatibus esse non quis rerum reiciendis nemo, enim nesciunt deserunt corrupti vero perferendis adipisci ipsum? Pariatur similique odio quidem qui. Beatae iure, in a consectetur fuga eveniet, nam quibusdam voluptas praesentium, aut voluptatum magni maiores rem architecto doloribus earum vero. Recusandae obcaecati minima, officia omnis, cum iste culpa animi, incidunt nobis perspiciatis fugiat laboriosam. Voluptates, ea. Ipsum repellat libero nesciunt mollitia obcaecati voluptatibus reiciendis ipsa, sunt blanditiis dolorum provident numquam rerum laboriosam magnam eligendi. Possimus quas inventore, provident eligendi fuga repellat quo soluta?',
-  },
-  {
-    id: '3',
-    title: 'Contoh Ide Usaha',
-    image: '/thumbniel.png',
-    category: ['Elektroknik', 'Pendidikan'],
-    location: 'Jakarta',
-    status: 'Dibuka',
-    investmentAmount: 'Rp. 10.000.000',
-    investmentAvalible: 'Rp. 5.000.000',
-    summary: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro nulla nostrum cumque vitae rem nihil eos at corrupti praesentium non.',
-    description:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro nulla nostrum cumque vitae rem nihil eos at corrupti praesentium non. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ea, sit quibusdam. Quo eum atque blanditiis possimus, neque necessitatibus esse non quis rerum reiciendis nemo, enim nesciunt deserunt corrupti vero perferendis adipisci ipsum? Pariatur similique odio quidem qui. Beatae iure, in a consectetur fuga eveniet, nam quibusdam voluptas praesentium, aut voluptatum magni maiores rem architecto doloribus earum vero. Recusandae obcaecati minima, officia omnis, cum iste culpa animi, incidunt nobis perspiciatis fugiat laboriosam. Voluptates, ea. Ipsum repellat libero nesciunt mollitia obcaecati voluptatibus reiciendis ipsa, sunt blanditiis dolorum provident numquam rerum laboriosam magnam eligendi. Possimus quas inventore, provident eligendi fuga repellat quo soluta?',
-  },
-];

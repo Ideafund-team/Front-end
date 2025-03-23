@@ -11,7 +11,7 @@ export default function Home() {
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
-          <h1 className="text-5xl max-sm:text-3xl font-bold">Wudjudkan Usaha Impian Anda Sekarang!</h1>
+          <h1 className="text-5xl max-sm:text-3xl font-bold">Wujudkan Usaha Impian Anda Sekarang!</h1>
           <p className="my-5 text-slate-600 max-sm:text-xs">Ideafund adalah platform yang menghubungkan pemilik ide usaha UMKM dengan investor. Temukan dukungan finansial dan strategis untuk mewujudkan usaha impian Anda!</p>
           <div className="flex gap-5 items-center justify-center mt-8">
             <Link href={'/cari-ide'}>

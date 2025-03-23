@@ -165,11 +165,11 @@ export default function RegisterPage() {
                 </div>
                 <p className="text-xs mt-5">
                   Dengan melanjutkan anda menyetujui{' '}
-                  <Link href="/" className="text-blue-600">
+                  <Link href="/syarat-dan-privasi#syarat-dan-ketentuan" className="text-blue-600">
                     Syarat dan Ketentuan
                   </Link>{' '}
                   dan{' '}
-                  <Link href="/" className="text-blue-600">
+                  <Link href="/syarat-dan-privasi#kebijakan-privasi" className="text-blue-600">
                     Kebijakan Privasi
                   </Link>{' '}
                   yang berlaku dari Ideafund

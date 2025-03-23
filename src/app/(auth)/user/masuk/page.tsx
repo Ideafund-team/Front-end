@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -18,7 +17,7 @@ type User = {
   password: string;
 };
 
-export default function page() {
+export default function Page() {
   const {
     register,
     handleSubmit,
