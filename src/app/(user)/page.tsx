@@ -15,7 +15,7 @@ export default function Home() {
           <p className="my-5 text-slate-600 max-sm:text-xs">Ideafund adalah platform yang menghubungkan pemilik ide usaha UMKM dengan investor. Temukan dukungan finansial dan strategis untuk mewujudkan usaha impian Anda!</p>
           <div className="flex gap-5 items-center justify-center mt-8">
             <Link href={'/cari-ide'}>
-              <Button className="w-40 py-5 cursor-pointer" variant={'secondary'}>
+              <Button className="w-40 py-5 cursor-pointer border-none" variant={'secondary'}>
                 Cari Ide
               </Button>
             </Link>
