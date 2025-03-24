@@ -1,15 +1,20 @@
 'use client';
 
-import { HandCoins, Lightbulb, WalletMinimal } from 'lucide-react';
-import React from 'react';
 import Cookies from 'js-cookie';
+import { HandCoins, Lightbulb, WalletMinimal } from 'lucide-react';
 
-import useSWR from 'swr';
+import IdeaCard from '@/components/ui/idea-card';
 import { fetcher } from '@/lib/fetcher';
+import { Idea } from '@/types/idea';
+import useSWR from 'swr';
 
 export default function Page() {
   const userId = Cookies.get('userId');
   const { data: user } = useSWR(userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/${userId}` : null, fetcher);
+  const { data: ideas } = useSWR(userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/getidowner/ide/${userId}` : null, fetcher);
+  const { data: investors } = useSWR(userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/getinvestorbyowner/${userId}` : null, fetcher);
+
+  const { data: investasi } = useSWR(userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/getallinvestor/allinvestor/${userId}` : null, fetcher);
 
   return (
     <div className="max-w-5xl">
@@ -31,7 +36,7 @@ export default function Page() {
               <Lightbulb />
             </div>
             <div>
-              <p className="font-semibold text-2xl">10</p>
+              <p className="font-semibold text-2xl">{ideas?.length || 0}</p>
               <p className="text-slate-400 text-sm">Ide Usaha</p>
             </div>
           </div>
@@ -40,7 +45,7 @@ export default function Page() {
               <HandCoins />
             </div>
             <div>
-              <p className="font-semibold text-2xl">10</p>
+              <p className="font-semibold text-2xl">{investors?.message === 'Investor tidak ditemukan' ? '0' : Array.isArray(investors) ? investors.length : '0'}</p>
               <p className="text-slate-400 text-sm">Investor</p>
             </div>
           </div>
@@ -49,7 +54,7 @@ export default function Page() {
               <WalletMinimal />
             </div>
             <div>
-              <p className="font-semibold text-2xl">10</p>
+              <p className="font-semibold text-2xl">{investasi?.message === 'Investor tidak ditemukan' ? '0' : Array.isArray(investors) ? investors.length : '0'}</p>
               <p className="text-slate-400 text-sm">Investasi</p>
             </div>
           </div>
@@ -58,8 +63,15 @@ export default function Page() {
 
       <div className="mt-8">
         <h1 className="text-xl font-medium border-b pb-2">Ide Terbaru</h1>
-        <div>
-          <p className="text-center text-sm mt-6 text-slate-400">Belum ada ide yang dibuat</p>
+        <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
+          {Array.isArray(ideas)
+            ? ideas
+                .slice(-3)
+                .reverse()
+                .map((ide: Idea, index: number) => <IdeaCard key={index} ide={ide} />)
+            : null}
+
+          {ideas?.length <= 0 && <p className="text-center text-sm mt-6 text-slate-400">Belum ada ide yang dibuat</p>}
         </div>
       </div>
     </div>

@@ -44,21 +44,10 @@ export default function Page() {
       setMessage(loginResult.message);
 
       if (loginResult.token && loginResult.id) {
-        const userResponse = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + `/user/${loginResult.id}`, {
-          method: 'GET',
-        });
-
-        const userResult = await userResponse.json();
-        console.log('User Response:', userResult);
-
-        if (userResult.is_active) {
-          toast.success('Berhasil masuk ke akun anda!');
-          Cookies.set('token', loginResult.token, { expires: 7 });
-          Cookies.set('userId', loginResult.id, { expires: 7 });
-          router.push('/user/dashboard');
-        } else {
-          toast.info('Maaf, akun anda belum aktif. Data anda sedang kami review, mohon untuk menunggu!');
-        }
+        toast.success('Berhasil masuk ke akun anda!');
+        Cookies.set('token', loginResult.token, { expires: 1 });
+        Cookies.set('userId', loginResult.id, { expires: 1 });
+        router.push('/user/dashboard');
       } else {
         toast.error('Login gagal. Silakan periksa kembali email dan password anda.');
       }

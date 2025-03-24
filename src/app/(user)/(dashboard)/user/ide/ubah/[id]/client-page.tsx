@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import Cookies from 'js-cookie';
 import { LoaderCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -20,10 +20,10 @@ type Idea = {
   summary: string;
   investment_amount: number;
   description: string;
-  image: FileList;
+  image: FileList | null;
 };
 
-export default function Page() {
+export default function ClientPage({ id }: { id: string }) {
   const {
     register,
     handleSubmit,
@@ -33,6 +33,37 @@ export default function Page() {
   const [isLoading, setIsLoading] = React.useState(false);
   const router = useRouter();
 
+  useEffect(() => {
+    const fetchIdea = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/idea/${id}`, {
+          method: 'GET',
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setValue('title', data.title);
+          setValue('kategori', data.kategori);
+          setValue('status', data.status);
+          setValue('location', data.location);
+          setValue('summary', data.summary);
+          setValue('investment_amount', data.investment_amount);
+          setValue('description', data.description);
+        } else {
+          toast.error('Gagal memuat data ide.');
+        }
+      } catch (error) {
+        console.error('Error fetching idea:', error);
+        toast.error('Terjadi kesalahan saat memuat data.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchIdea();
+  }, [id, setValue]);
+
   const onSubmit: SubmitHandler<Idea> = async (data) => {
     const formData = new FormData();
 
@@ -41,20 +72,19 @@ export default function Page() {
     formData.append('summary', data.summary);
     formData.append('kategori', data.kategori);
     formData.append('investment_amount', data.investment_amount.toString());
-    formData.append('investment_available', data.investment_amount.toString());
     formData.append('location', data.location);
     formData.append('description', data.description);
-    formData.append('image', data.image[0]);
+    if (data.image && data.image[0]) {
+      formData.append('image', data.image[0]);
+    }
     formData.append('id_owner', id_owner);
     formData.append('status', data.status);
-
-    console.log(id_owner);
 
     try {
       setIsLoading(true);
       const token = Cookies.get('token');
-      const response = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/idea', {
-        method: 'POST',
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/updateide/ide/${id}`, {
+        method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -64,12 +94,14 @@ export default function Page() {
       const result = await response.json();
       console.log('Response:', result);
       if (response.ok) {
-        toast.success('Berhasil membuat ide baru!');
+        toast.success('Berhasil memperbarui ide!');
         router.push('/user/dashboard');
+      } else {
+        toast.error('Gagal memperbarui ide.');
       }
     } catch (error) {
       console.error('Error:', error);
-      toast.error('Gagal membuat ide.');
+      toast.error('Terjadi kesalahan saat memperbarui ide.');
     } finally {
       setIsLoading(false);
     }
@@ -78,8 +110,8 @@ export default function Page() {
   return (
     <div className="max-w-5xl">
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold">Buat Ide</h1>
-        <p className="text-slate-600 text-sm">Lengkapi data berikut untuk membuat ide baru</p>
+        <h1 className="text-2xl font-semibold">Ubah Ide</h1>
+        <p className="text-slate-600 text-sm">Perbarui data berikut untuk ide Anda</p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="">
         <Label htmlFor="title" className="mb-3 text-base">
@@ -176,7 +208,7 @@ export default function Page() {
         <Label htmlFor="image" className="mb-3 mt-4 text-base">
           Gambar
         </Label>
-        <Input {...register('image', { required: 'Gambar wajib diisi' })} type="file" aria-invalid={errors.image && 'true'} className="w-full" />
+        <Input {...register('image')} type="file" aria-invalid={errors.image && 'true'} className="w-full" />
         {errors.image && <p className="text-xs text-red-500 mt-3">{errors.image.message}</p>}
 
         <div className="mt-4 mb-10 w-full flex justify-end gap-4">
@@ -189,7 +221,7 @@ export default function Page() {
                 <LoaderCircle className="animate-spin" /> Mohon tunggu...
               </span>
             ) : (
-              'Buat Ide'
+              'Perbarui Ide'
             )}
           </Button>
         </div>
