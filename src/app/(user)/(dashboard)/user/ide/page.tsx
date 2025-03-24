@@ -169,7 +169,9 @@ export default function Page() {
           ))}
       </section>
 
-      <p className="text-center w-full text-slate-600">{filteredIdeas.length <= 0 && 'Ide yang ada cari tidak ada'}</p>
+      {filteredIdeas && filteredIdeas.length === 0 && searchTerm != '' && <p className="text-center w-full text-sm mt-6 text-slate-400">Ide yang anda cari belum ada</p>}
+
+      {ideas?.message === 'Ide tidak ditemukan' && searchTerm === '' ? <p className="text-center w-full text-sm mt-6 text-slate-400">Belum ada ide yang dibuat</p> : null}
     </div>
   );
 }

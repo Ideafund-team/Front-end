@@ -54,7 +54,7 @@ export default function Navbar() {
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <div className="flex gap-3 border rounded-md px-4 py-2 items-center cursor-pointer hover:bg-gray-50">
-                  <Image src={data.foto_profil} width={25} height={25} alt="Avatar" unoptimized className="rounded-full" />
+                  <Image src={data.foto_profil} width={25} height={25} alt="Avatar" unoptimized className="rounded-full h-6 object-cover" />
                   <p>{data.nama.split(' ')[0]}</p>
                 </div>
               </DropdownMenuTrigger>

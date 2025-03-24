@@ -1,6 +1,6 @@
 'use client';
 
-import { HandCoins, Home, Lightbulb, WalletMinimal } from 'lucide-react';
+import { HandCoins, Home, Lightbulb, UserRound, WalletMinimal } from 'lucide-react';
 
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { usePathname } from 'next/navigation';
@@ -26,6 +26,11 @@ const items = [
     title: 'Investasi',
     url: '/user/investasi',
     icon: WalletMinimal,
+  },
+  {
+    title: 'Profil',
+    url: '/user/profil',
+    icon: UserRound,
   },
 ];
 

@@ -5,7 +5,9 @@ export default function TermsAndPrivacyPage() {
     <div className="max-w-6xl mx-auto px-4 py-5">
       {/* Syarat dan Ketentuan */}
       <div className="pt-10 w-full text-center scroll-mt-20" id="syarat-dan-ketentuan">
-        <h1 className="text-3xl font-semibold text-blue-600">Syarat dan Ketentuan</h1>
+        <h1 className="text-3xl font-semibold ">
+          Syarat dan <span className="text-blue-600">Ketentuan</span>
+        </h1>
         <p className="text-slate-400 text-sm mt-2">Diperbarui pada 2025</p>
       </div>
       <section className="mt-8 space-y-4 pb-10">
@@ -67,7 +69,9 @@ export default function TermsAndPrivacyPage() {
 
       {/* Kebijakan Privasi */}
       <div className="pt-10 w-full text-center scroll-mt-20" id="kebijakan-privasi">
-        <h1 className="text-3xl font-semibold text-blue-600">Kebijakan Privasi</h1>
+        <h1 className="text-3xl font-semibold">
+          Kebijakan <span className="text-blue-600">Privasi</span>
+        </h1>
         <p className="text-slate-400 text-sm mt-2">Privasi Anda adalah prioritas kami.</p>
       </div>
       <section className="mt-8 space-y-4 pb-10">

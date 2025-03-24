@@ -4,8 +4,8 @@ export default function TentangKamiPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-5">
       <div className="mt-10 w-full text-center">
-        <h1 className="text-3xl font-semibold text-blue-600">Tentang Kami</h1>
-        <p className="text-slate-400 text-sm mt-2">Selamat datang di <span className="font-semibold">Ideafund</span></p>
+        <h1 className="text-3xl font-semibold ">Tentang <span className='text-blue-600'>Kami</span></h1>
+        <p className="text-slate-400 text-sm mt-2">Mengenal lebih dekat <span className="font-semibold">Ideafund</span></p>
       </div>
       <section className="mt-8 space-y-4 pb-10">
         <p className="text-sm text-slate-600 text-justify">Selamat datang di <span className="font-semibold">Ideafund</span>, platform yang menghubungkan inovator dan investor dalam satu ekosistem kolaboratif. Kami hadir untuk menciptakan peluang baru bagi pengembangan bisnis dan mendorong pertumbuhan ekonomi yang berkelanjutan. Dengan <span className="font-semibold">Ideafund</span>, setiap ide memiliki kesempatan untuk berkembang dan mendapatkan dukungan yang tepat.</p>

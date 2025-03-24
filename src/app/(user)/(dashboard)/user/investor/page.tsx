@@ -55,40 +55,42 @@ export default function Page() {
         </Link>
       </div>
       <section className="grid pb-10 mt-3 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-        {filteredIdeas &&
-          filteredIdeas.map((ide: Idea, index: number) => (
-            <div key={index} className="border rounded-lg w-full p-4 mt-4">
-              <div className="relative">
-                <Image src={ide.image} width={10} height={10} alt={ide.title} className="w-full rounded-md sm:h-52 object-cover" unoptimized />
-                <div className="absolute top-2 right-2 bg-white px-3 py-1 rounded-full flex items-center gap-2 shadow">
-                  <span className={`h-2 w-2 rounded-full ${ide.status === true ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                  <p className="text-xs font-medium">{ide.status === true ? 'Dibuka' : 'Ditutup'}</p>
+        {filteredIdeas && filteredIdeas.length > 0
+          ? filteredIdeas.map((ide: Idea, index: number) => (
+              <div key={index} className="border rounded-lg w-full p-4 mt-4">
+                <div className="relative">
+                  <Image src={ide.image} width={10} height={10} alt={ide.title} className="w-full rounded-md sm:h-52 object-cover" unoptimized />
+                  <div className="absolute top-2 right-2 bg-white px-3 py-1 rounded-full flex items-center gap-2 shadow">
+                    <span className={`h-2 w-2 rounded-full ${ide.status === true ? 'bg-green-500' : 'bg-red-500'}`}></span>
+                    <p className="text-xs font-medium">{ide.status === true ? 'Dibuka' : 'Ditutup'}</p>
+                  </div>
                 </div>
-              </div>
-              <p className="text-xl font-semibold mt-3">{ide.title}</p>
-              <div className="flex gap-2 mt-2">
-                <p className="text-blue-600 bg-blue-600/10 px-4 py-1 rounded-full text-xs">{ide.kategori}</p>
-              </div>
+                <p className="text-xl font-semibold mt-3">{ide.title}</p>
+                <div className="flex gap-2 mt-2">
+                  <p className="text-blue-600 bg-blue-600/10 px-4 py-1 rounded-full text-xs">{ide.kategori}</p>
+                </div>
 
-              <p className="text-sm my-4 line-clamp-3">{ide.summary}</p>
-              <div className="flex gap-2 items-center">
-                <p className="text-green-500 bg-green-500/10 flex gap-2 items-center w-max px-4 py-1 rounded-full text-sm">
-                  <HandCoins size={18} /> {ide.investment_amount}
-                </p>
-                <p className="text-red-600 bg-red-600/10 flex gap-2 items-center w-max px-4 py-1 rounded-full text-sm">
-                  <MapPin size={16} /> {ide.location}
-                </p>
+                <p className="text-sm my-4 line-clamp-3">{ide.summary}</p>
+                <div className="flex gap-2 items-center">
+                  <p className="text-green-500 bg-green-500/10 flex gap-2 items-center w-max px-4 py-1 rounded-full text-sm">
+                    <HandCoins size={18} /> {ide.investment_amount}
+                  </p>
+                  <p className="text-red-600 bg-red-600/10 flex gap-2 items-center w-max px-4 py-1 rounded-full text-sm">
+                    <MapPin size={16} /> {ide.location}
+                  </p>
+                </div>
+                <Link href={`/user/investor/${ide.id}`} className="mt-5">
+                  <Button className="bg-blue-600 mt-5 hover:bg-blue-500 cursor-pointer w-full">
+                    Lihat Investor <ChevronRight />
+                  </Button>
+                </Link>
               </div>
-              <Link href={`/user/investor/${ide.id}`} className="mt-5">
-                <Button className="bg-blue-600 mt-5 hover:bg-blue-500 cursor-pointer w-full">
-                  Lihat Investor <ChevronRight />
-                </Button>
-              </Link>
-            </div>
-          ))}
+            ))
+          : null}
       </section>
+      {filteredIdeas && filteredIdeas.length === 0 && searchTerm != '' && <p className="text-center w-full text-sm mt-6 text-slate-400">Ide yang anda cari belum ada</p>}
 
-      <p className="text-center w-full text-slate-600">{filteredIdeas.length <= 0 && 'Ide yang ada cari tidak ada'}</p>
+      {ideas?.message === 'Ide tidak ditemukan' && searchTerm === '' ? <p className="text-center w-full text-sm mt-6 text-slate-400">Belum ada ide yang dibuat</p> : null}
     </div>
   );
 }

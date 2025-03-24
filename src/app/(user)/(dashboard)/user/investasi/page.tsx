@@ -145,7 +145,13 @@ export default function Page() {
                 </div>
               </div>
               <div>
-                <p className={`${invest.status === 'diterima' ? 'text-green-600 bg-green-600/10' : 'text-red-500 bg-red-500/10'} text-sm px-2 py-1 rounded-full h-max mr-4`}>{invest.status}</p>
+                <p
+                  className={`${
+                    invest.status === 'diterima' ? 'text-green-600 bg-green-600/10' : invest.status === 'pending' ? 'text-yellow-500 bg-yellow-50/10' : 'text-red-500 bg-red-500/10'
+                  } text-sm px-4 py-1 rounded-full h-max mr-4 capitalize`}
+                >
+                  {invest.status === 'pending' ? 'Menunggu' : invest.status}
+                </p>
               </div>
             </div>
           ))}

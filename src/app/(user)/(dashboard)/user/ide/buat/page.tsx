@@ -164,7 +164,7 @@ export default function Page() {
           aria-invalid={errors.summary && 'true'}
           className="w-full"
         />
-        <p className="text-slate-600 text-xs p-2 ps-1 pb-0">Maksimal 50 kata</p>
+        <p className="text-slate-600 text-xs p-2 ps-1 pb-0">Maksimal 15 kata</p>
         {errors.summary && <p className="text-xs text-red-500 mt-3">{errors.summary.message}</p>}
 
         <Label htmlFor="description" className="mb-3 mt-4 text-base">

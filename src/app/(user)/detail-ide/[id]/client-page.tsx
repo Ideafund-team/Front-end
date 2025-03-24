@@ -81,7 +81,11 @@ export default function ClientPage({ id }: { id: string }) {
   };
 
   if (!idea) {
-    return <div>Loading...</div>;
+    return (
+      <div className="h-screen w-screen flex items-center justify-center">
+        <p>Memuat...</p>
+      </div>
+    );
   }
 
   return (
