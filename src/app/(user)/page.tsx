@@ -19,7 +19,7 @@ export default function Home() {
                 Cari Ide
               </Button>
             </Link>
-            <Link href={'/daftar'}>
+            <Link href={'/user/daftar'}>
               <Button className="bg-blue-600 hover:bg-blue-500 w-40 py-5 cursor-pointer">Daftar Sekarang</Button>
             </Link>
           </div>
