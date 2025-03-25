@@ -49,7 +49,7 @@ export default function Navbar() {
           </ul>
         </div>
 
-        <div className='max-md:flex gap-3 items-center'>
+        <div className="max-md:flex gap-3 items-center">
           {data?.nama ? (
             <DropdownMenu>
               <DropdownMenuTrigger>
@@ -85,7 +85,7 @@ export default function Navbar() {
 
           <div className="md:hidden">
             <Sheet>
-              <SheetTrigger asChild>
+              <SheetTrigger>
                 <Button variant="outline">
                   <Menu />
                 </Button>
@@ -100,11 +100,13 @@ export default function Navbar() {
                 <div className="mt-3">
                   <ul className="flex flex-col gap-8 px-4 text-sm">
                     {menus.map((menu, index) => (
-                      <SheetClose key={index} asChild>
-                        <li className={`hover:text-blue-500 transition-all duration-200 ${pathname === menu.link ? 'text-blue-500' : ''}`}>
-                          <Link href={menu.link}>{menu.label}</Link>
-                        </li>
-                      </SheetClose>
+                      <li key={index} className={`hover:text-blue-500 transition-all duration-200 ${pathname === menu.link ? 'text-blue-500' : ''}`}>
+                        <SheetClose asChild>
+                          <button onClick={() => router.push(menu.link)} className="text-left w-full">
+                            {menu.label}
+                          </button>
+                        </SheetClose>
+                      </li>
                     ))}
                   </ul>
                 </div>
