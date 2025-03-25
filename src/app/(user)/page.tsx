@@ -108,7 +108,7 @@ export default function Home() {
                 <p className="italic text-sm mt-2">{user.testimoni}</p>
                 <div className="flex items-center gap-3 mt-3">
                   <Image src={user.avatar} width={60} height={60} alt={user.nama} className="rounded-full w-10 h-10 object-cover" />
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col">
                     <p className="font-medium">{user.nama}</p>
                     <p className="text-xs text-slate-600">Pengguna</p>
                   </div>

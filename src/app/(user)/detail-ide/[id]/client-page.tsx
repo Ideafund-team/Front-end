@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { fetcher } from '@/lib/fetcher';
 import { Idea } from '@/types/idea';
-import { HandCoins, LoaderCircle, MapPin, Send, UserRound } from 'lucide-react';
+import { HandCoins, LoaderCircle, Mail, MapPin, PhoneCall, Send, UserRound } from 'lucide-react';
 import Image from 'next/image';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import useSWR from 'swr';
@@ -35,10 +35,14 @@ export default function ClientPage({ id }: { id: string }) {
 
   const { data: investorIn } = useSWR(process.env.NEXT_PUBLIC_API_BASE_URL + `/getinvestoride/allinvestoride/${idea?.id}`, fetcher);
 
+  const investorLength = Array.isArray(investorIn) ? investorIn.filter((investor) => investor.status === 'diterima').length : 0;
+
   const idUser = Cookies.get('userId');
   const token = Cookies.get('token');
 
   const { data: user } = useSWR(idUser ? process.env.NEXT_PUBLIC_API_BASE_URL + `/user/${idUser}` : null, fetcher);
+
+  const { data: owner } = useSWR(idea ? process.env.NEXT_PUBLIC_API_BASE_URL + `/user/${idea.id_owner}` : null, fetcher);
 
   const onSubmit: SubmitHandler<Investment> = async (data) => {
     if (!idea || !user) return;
@@ -103,10 +107,46 @@ export default function ClientPage({ id }: { id: string }) {
         </div>
         <h1 className="text-2xl font-semibold mt-4">{idea.title}</h1>
         <p className="text-xs text-slate-600 mt-1">Dibuat {new Date(idea.created_at).toLocaleDateString('id-ID')}</p>
+        {owner && (
+          <div className="flex items-center justify-between">
+            <div className="flex gap-3 mt-4">
+              <Image src={owner.foto_profil} width={50} height={50} alt={owner.nama} unoptimized className="rounded-full w-10 h-10 object-cover" />
+              <div>
+                <p className="font-medium">{owner.nama}</p>
+                <p className="text-sm text-slate-600">Pemilik ide</p>
+              </div>
+            </div>
+            <div>
+              <Dialog>
+                <DialogTrigger>
+                  <Button className="hover:bg-blue-500 cursor-pointer rounded-full bg-blue-600">Hubungi</Button>
+                </DialogTrigger>
+
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Kontak</DialogTitle>
+                    <div className="mt-3">
+                      <p>Email</p>
+                      <p className="flex text-slate-600 gap-2 items-center mt-2">
+                        <Mail size={18} /> {owner.email}
+                      </p>
+                    </div>
+                    <div className="mt-3">
+                      <p>No Handphone</p>
+                      <p className="flex text-slate-600 gap-2 items-center mt-2">
+                        <PhoneCall size={18} /> {owner.no_hp}
+                      </p>
+                    </div>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+        )}
         <div className="mt-6 flex max-sm:flex-wrap gap-5 items-center">
           <p className="flex gap-2 items-center">
             <HandCoins size={18} className="text-green-500" />
-            Rp. {idea.investment_amount}
+            Rp. {parseFloat(idea.investment_amount).toLocaleString('id-ID')}
           </p>
           <p className="flex gap-2 items-center">
             <MapPin size={18} className="text-red-500" />
@@ -114,7 +154,7 @@ export default function ClientPage({ id }: { id: string }) {
           </p>
           <p className="flex gap-2 items-center">
             <UserRound size={18} className="text-blue-500" />
-            {investorIn && Array.isArray(investorIn) && investorIn.length ? `${investorIn.length} Investor Terlibat` : '0 Investor Terlibat'}
+            {investorLength} Investor Terlibat
           </p>
         </div>
         <p className="mt-4 leading-relaxed text-slate-600">{idea.description}</p>

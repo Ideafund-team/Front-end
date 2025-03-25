@@ -239,7 +239,7 @@ export default function ClientPage({ id }: { id: string }) {
                   </Dialog>
                 </div>
               ) : (
-                <p className={`${invest.status === 'diterima' ? 'text-green-600 bg-green-600/10' : 'text-red-500 bg-red-500/10'} text-sm px-2 py-1 rounded-full h-max mr-4`}>{invest.status}</p>
+                <p className={`${invest.status === 'diterima' ? 'text-green-600 bg-green-600/10' : 'text-red-500 bg-red-500/10'} text-sm px-2 py-1 rounded-full h-max mr-4 capitalize`}>{invest.status}</p>
               )}
             </div>
           ))}
