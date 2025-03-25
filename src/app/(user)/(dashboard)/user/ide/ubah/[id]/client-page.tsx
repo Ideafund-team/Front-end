@@ -209,6 +209,7 @@ export default function ClientPage({ id }: { id: string }) {
           Gambar
         </Label>
         <Input {...register('image')} type="file" aria-invalid={errors.image && 'true'} className="w-full" />
+        <p className="text-slate-600 text-xs p-2 ps-1 pb-0">Ukuran gambar 16:9</p>
         {errors.image && <p className="text-xs text-red-500 mt-3">{errors.image.message}</p>}
 
         <div className="mt-4 mb-10 w-full flex justify-end gap-4">

@@ -59,7 +59,7 @@ export default function Page() {
           ? filteredIdeas.map((ide: Idea, index: number) => (
               <div key={index} className="border rounded-lg w-full p-4 mt-4">
                 <div className="relative">
-                  <Image src={ide.image} width={10} height={10} alt={ide.title} className="w-full rounded-md sm:h-52 object-cover" unoptimized />
+                  <Image src={ide.image} width={10} height={10} alt={ide.title} className="w-full rounded-md aspect-video object-cover" unoptimized />
                   <div className="absolute top-2 right-2 bg-white px-3 py-1 rounded-full flex items-center gap-2 shadow">
                     <span className={`h-2 w-2 rounded-full ${ide.status === true ? 'bg-green-500' : 'bg-red-500'}`}></span>
                     <p className="text-xs font-medium">{ide.status === true ? 'Dibuka' : 'Ditutup'}</p>

@@ -105,7 +105,7 @@ export default function Page() {
 
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Ubah Profil</DialogTitle>
+                <DialogTitle className='text-left'>Ubah Profil</DialogTitle>
               </DialogHeader>
               <p>Apakah ada yakin merubah data anda?</p>
               <div className="flex gap-2 justify-end">

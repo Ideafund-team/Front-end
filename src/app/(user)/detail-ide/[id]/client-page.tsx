@@ -125,13 +125,13 @@ export default function ClientPage({ id }: { id: string }) {
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Kontak</DialogTitle>
-                    <div className="mt-3">
+                    <div className="mt-3 text-left">
                       <p>Email</p>
                       <p className="flex text-slate-600 gap-2 items-center mt-2">
                         <Mail size={18} /> {owner.email}
                       </p>
                     </div>
-                    <div className="mt-3">
+                    <div className="mt-3 text-left">
                       <p>No Handphone</p>
                       <p className="flex text-slate-600 gap-2 items-center mt-2">
                         <PhoneCall size={18} /> {owner.no_hp}

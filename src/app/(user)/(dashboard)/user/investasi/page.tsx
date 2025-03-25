@@ -7,6 +7,8 @@ import Cookies from 'js-cookie';
 import { fetcher } from '@/lib/fetcher';
 import useSWR from 'swr';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { ExternalLink } from 'lucide-react';
 
 interface Investor {
   id_investor: string;
@@ -82,7 +84,7 @@ export default function Page() {
       <div className="flex flex-col gap-3 max-w-3xl mt-8">
         {Array.isArray(investor) &&
           investor.map((invest, index) => (
-            <div key={index} className="bg-white border items-center rounded-md p-2 flex justify-between max-sm:flex-col gap-4">
+            <div key={index} className="bg-white border sm:items-center rounded-md p-2 flex justify-between max-sm:flex-col gap-4">
               <div className="flex sm:items-center gap-4 max-sm:flex-col w-full">
                 <div>
                   <Image
@@ -90,7 +92,7 @@ export default function Page() {
                     width={135}
                     height={100}
                     alt={ideaData[invest.id_ide]?.title || 'Judul Tidak Diketahui'}
-                    className="rounded-md max-sm:w-full max-h-24 object-cover"
+                    className="rounded-md max-sm:w-full sm:h-24 max-sm:aspect-video object-cover"
                     unoptimized
                   />
                 </div>
@@ -115,7 +117,12 @@ export default function Page() {
                               <tr>
                                 <td className="pb-2">Judul Ide</td>
                                 <td className="px-2">:</td>
-                                <p className="font-medium">{ideaData[invest.id_ide]?.title || 'Judul Tidak Diketahui'}</p>
+                                <p className="font-medium flex gap-2 items-center">
+                                  {ideaData[invest.id_ide]?.title || 'Judul Tidak Diketahui'}{' '}
+                                  <Link href={`/detail-ide/${invest.id_ide}`} target="_blank">
+                                    <ExternalLink size={16} className="text-blue-600" />
+                                  </Link>
+                                </p>
                               </tr>
                               <tr>
                                 <td className="py-2">Jumlah</td>
@@ -148,7 +155,7 @@ export default function Page() {
                 <p
                   className={`${
                     invest.status === 'diterima' ? 'text-green-600 bg-green-600/10' : invest.status === 'pending' ? 'text-yellow-500 bg-yellow-50/10' : 'text-red-500 bg-red-500/10'
-                  } text-sm px-4 py-1 rounded-full h-max mr-4 capitalize`}
+                  } text-sm px-4 py-1 rounded-full h-max mr-4 capitalize w-max max-sm:mb-1`}
                 >
                   {invest.status === 'pending' ? 'Menunggu' : invest.status}
                 </p>
@@ -156,7 +163,7 @@ export default function Page() {
             </div>
           ))}
       </div>
-      {investor.length === 0 || (investor as any).message ? <p className="text-center text-slate-400 w-full">Kamu belum melakukan investasi</p> : null}
+      {(investor as any).message ? <p className="text-center text-slate-400 w-full text-sm">Kamu belum melakukan investasi</p> : null}
     </div>
   );
 }

@@ -124,10 +124,10 @@ export default function ClientPage({ id }: { id: string }) {
       <div className="flex flex-col gap-3 max-w-3xl mt-8">
         {Array.isArray(investors) &&
           investors.map((invest: Investor, index: number) => (
-            <div key={index} className="bg-white border rounded-md p-2 flex justify-between max-sm:flex-col gap-4 items-center">
+            <div key={index} className="bg-white border rounded-md p-2 flex justify-between max-sm:flex-col gap-4 sm:items-center">
               <div className="flex sm:items-center gap-4 max-sm:flex-col w-full">
                 <div>
-                  <Image src={investorPhotos[invest.id_investor] || '/default-avatar.jpg'} width={134} height={100} alt={invest.nama_investor} className="rounded-md max-sm:w-full max-h-24 object-cover" unoptimized />
+                  <Image src={investorPhotos[invest.id_investor] || '/default-avatar.jpg'} width={134} height={100} alt={invest.nama_investor} className="rounded-md aspect-video max-sm:w-full sm:h-24 object-cover" unoptimized />
                 </div>
                 <div className="max-sm:ps-1">
                   <p className="font-medium">{invest.nama_investor}</p>
@@ -221,7 +221,7 @@ export default function ClientPage({ id }: { id: string }) {
                         <DialogTitle className="text-start">Konfirmasi</DialogTitle>
                         <DialogClose />
                       </DialogHeader>
-                      <div>
+                      <div className="text-left">
                         <p>Apakah anda yakin menolak tawaran investasi ini?</p>
                         <p className="text-sm mt-2 text-slate-600">Pastikan anda sudah berkomunikasi dengan investor melalui kontak yang tersedia.</p>
                       </div>
@@ -239,7 +239,7 @@ export default function ClientPage({ id }: { id: string }) {
                   </Dialog>
                 </div>
               ) : (
-                <p className={`${invest.status === 'diterima' ? 'text-green-600 bg-green-600/10' : 'text-red-500 bg-red-500/10'} text-sm px-2 py-1 rounded-full h-max mr-4 capitalize`}>{invest.status}</p>
+                <p className={`${invest.status === 'diterima' ? 'text-green-600 bg-green-600/10' : 'text-red-500 bg-red-500/10'} text-sm px-2 py-1 rounded-full h-max mr-4 capitalize w-max max-sm:mb-1`}>{invest.status}</p>
               )}
             </div>
           ))}
