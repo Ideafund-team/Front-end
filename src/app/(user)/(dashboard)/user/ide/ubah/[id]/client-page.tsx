@@ -187,16 +187,20 @@ export default function ClientPage({ id }: { id: string }) {
         <Textarea
           {...register('summary', {
             required: 'Ringkasan wajib diisi',
-            validate: (value) => {
-              const wordCount = value.trim().split(/\s+/).length;
-              return wordCount <= 15 || 'Ringkasan tidak boleh lebih dari 15 kata';
+            minLength: {
+              value: 15,
+              message: 'Ringkasan harus memiliki minimal 15 karakter',
+            },
+            maxLength: {
+              value: 15,
+              message: 'Ringkasan tidak boleh lebih dari 15 karakter',
             },
           })}
           placeholder="Ringkasan mengenai ide anda"
           aria-invalid={errors.summary && 'true'}
           className="w-full"
         />
-        <p className="text-slate-600 text-xs p-2 ps-1 pb-0">Maksimal 50 kata</p>
+        <p className="text-slate-600 text-xs p-2 ps-1 pb-0">Ringkasan 15 karakter</p>
         {errors.summary && <p className="text-xs text-red-500 mt-3">{errors.summary.message}</p>}
 
         <Label htmlFor="description" className="mb-3 mt-4 text-base">

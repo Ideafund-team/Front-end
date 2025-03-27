@@ -11,6 +11,7 @@ import useSWR from 'swr';
 import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import { toast } from 'sonner';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
 
 interface Investor {
   id_investor: string;
@@ -127,7 +128,11 @@ export default function ClientPage({ id }: { id: string }) {
             <div key={index} className="bg-white border rounded-md p-2 flex justify-between max-sm:flex-col gap-4 sm:items-center">
               <div className="flex sm:items-center gap-4 max-sm:flex-col w-full">
                 <div>
-                  <Image src={investorPhotos[invest.id_investor] || '/default-avatar.jpg'} width={134} height={100} alt={invest.nama_investor} className="rounded-md aspect-video max-sm:w-full sm:h-24 object-cover" unoptimized />
+                  <PhotoProvider>
+                    <PhotoView src={investorPhotos[invest.id_investor]}>
+                      <Image src={investorPhotos[invest.id_investor] || '/default-avatar.jpg'} width={134} height={100} alt={invest.nama_investor} className="rounded-md aspect-video max-sm:w-full sm:h-24 object-cover  cursor-pointer hover:brightness-75 transition-all duration-200" unoptimized />
+                    </PhotoView>
+                  </PhotoProvider>
                 </div>
                 <div className="max-sm:ps-1">
                   <p className="font-medium">{invest.nama_investor}</p>

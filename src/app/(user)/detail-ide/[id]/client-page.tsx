@@ -13,6 +13,7 @@ import useSWR from 'swr';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
 
 type Investment = {
   id_owner: string;
@@ -96,7 +97,11 @@ export default function ClientPage({ id }: { id: string }) {
     <div className="max-w-3xl mx-auto px-4 mt-10 mb-22">
       <div>
         <div className="relative">
-          <Image src={idea.image || '/thumbniel.png'} width={100} height={100} alt={idea.title} className="w-full rounded-md aspect-video object-cover" unoptimized />
+          <PhotoProvider>
+            <PhotoView src={idea.image}>
+              <Image src={idea.image || '/thumbniel.png'} width={100} height={100} alt={idea.title} className="w-full rounded-md aspect-video object-cover cursor-pointer hover:brightness-75 transition-all duration-200" unoptimized />
+            </PhotoView>
+          </PhotoProvider>
           <div className="absolute top-2 right-2 bg-white px-3 py-1 rounded-full flex items-center gap-2 shadow">
             <span className={`h-2 w-2 rounded-full ${idea.status === true ? 'bg-green-500' : 'bg-red-500'}`}></span>
             <p className="text-xs font-medium">{idea.status === true ? 'Dibuka' : 'Ditutup'}</p>
@@ -124,7 +129,7 @@ export default function ClientPage({ id }: { id: string }) {
 
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Kontak</DialogTitle>
+                    <DialogTitle className='text-left'>Kontak</DialogTitle>
                     <div className="mt-3 text-left">
                       <p>Email</p>
                       <p className="flex text-slate-600 gap-2 items-center mt-2">
@@ -157,7 +162,7 @@ export default function ClientPage({ id }: { id: string }) {
             {investorLength} Investor Terlibat
           </p>
         </div>
-        <p className="mt-4 leading-relaxed text-slate-600">{idea.description}</p>
+        <p className="mt-4 leading-relaxed text-slate-600 whitespace-pre-wrap">{idea.description}</p>
         <div>
           <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2">
             <Dialog>

@@ -9,6 +9,7 @@ import useSWR from 'swr';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ExternalLink } from 'lucide-react';
+import { PhotoProvider, PhotoView } from 'react-photo-view';
 
 interface Investor {
   id_investor: string;
@@ -87,14 +88,18 @@ export default function Page() {
             <div key={index} className="bg-white border sm:items-center rounded-md p-2 flex justify-between max-sm:flex-col gap-4">
               <div className="flex sm:items-center gap-4 max-sm:flex-col w-full">
                 <div>
-                  <Image
-                    src={ideaData[invest.id_ide]?.image || '/default-image.jpg'}
-                    width={135}
-                    height={100}
-                    alt={ideaData[invest.id_ide]?.title || 'Judul Tidak Diketahui'}
-                    className="rounded-md max-sm:w-full sm:h-24 max-sm:aspect-video object-cover"
-                    unoptimized
-                  />
+                  <PhotoProvider>
+                    <PhotoView src={ideaData[invest.id_ide]?.image}>
+                      <Image
+                        src={ideaData[invest.id_ide]?.image || '/default-image.jpg'}
+                        width={135}
+                        height={100}
+                        alt={ideaData[invest.id_ide]?.title || 'Judul Tidak Diketahui'}
+                        className="rounded-md cursor-pointer  hover:brightness-75 transition-all duration-200 max-sm:w-full sm:h-24 max-sm:aspect-video object-cover"
+                        unoptimized
+                      />
+                    </PhotoView>
+                  </PhotoProvider>
                 </div>
                 <div className="max-sm:ps-1">
                   <p className="font-medium">{ideaData[invest.id_ide]?.title || 'Judul Tidak Diketahui'}</p>
