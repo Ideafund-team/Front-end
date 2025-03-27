@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: 'platform yang menghubungkan pemilik ide usaha UMKM dengan investor. Temukan dukungan finansial dan strategis untuk mewujudkan usaha impian Anda!',
 };
 
-export const dynamic = 'force-static';
+// export const dynamic = 'force-static';
 
 export default function RootLayout({
   children,

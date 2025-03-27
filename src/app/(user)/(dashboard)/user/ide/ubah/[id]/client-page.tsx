@@ -188,19 +188,19 @@ export default function ClientPage({ id }: { id: string }) {
           {...register('summary', {
             required: 'Ringkasan wajib diisi',
             minLength: {
-              value: 15,
-              message: 'Ringkasan harus memiliki minimal 15 karakter',
+              value: 100,
+              message: 'Ringkasan harus memiliki minimal 100 karakter',
             },
             maxLength: {
-              value: 15,
-              message: 'Ringkasan tidak boleh lebih dari 15 karakter',
+              value: 120,
+              message: 'Ringkasan tidak boleh lebih dari 120 karakter',
             },
           })}
           placeholder="Ringkasan mengenai ide anda"
           aria-invalid={errors.summary && 'true'}
           className="w-full"
         />
-        <p className="text-slate-600 text-xs p-2 ps-1 pb-0">Ringkasan 15 karakter</p>
+        <p className="text-slate-600 text-xs p-2 ps-1 pb-0">Ringkasan 100-120 karakter</p>
         {errors.summary && <p className="text-xs text-red-500 mt-3">{errors.summary.message}</p>}
 
         <Label htmlFor="description" className="mb-3 mt-4 text-base">
