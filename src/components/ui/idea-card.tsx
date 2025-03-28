@@ -6,11 +6,11 @@ import Image from 'next/image';
 import { Idea } from '@/types/idea';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 
-export default function IdeaCard({ ide }: { ide: Idea }) {
+export default function IdeaCard({ ide, linkDetail }: { ide: Idea, linkDetail?: string }) {
   return (
     <div>
       <div className="border rounded-lg w-full p-4 mt-4 ">
-        <div className="flex flex-col sm:justify-between sm:min-h-[27rem] ">
+        <div className="flex flex-col sm:justify-between">
           <div className="">
             <div className="relative">
               <PhotoProvider>
@@ -39,7 +39,7 @@ export default function IdeaCard({ ide }: { ide: Idea }) {
                 <MapPin size={16} /> {ide.location}
               </p>
             </div>
-            <Link href={`/detail-ide/${ide.id}`} className="">
+            <Link href={linkDetail ? linkDetail : `/detail-ide/${ide.id}`} className="">
               <Button className="bg-blue-600 mt-5 hover:bg-blue-500 cursor-pointer w-full">
                 Lihat Detail <ChevronRight />
               </Button>

@@ -14,6 +14,7 @@ import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
+import Link from 'next/link';
 
 type Investment = {
   id_owner: string;
@@ -30,7 +31,7 @@ export default function ClientPage({ id }: { id: string }) {
     handleSubmit,
     formState: { errors },
   } = useForm<Investment>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingInvestasi, setIsLoadingInvestasi] = useState(false);
 
   const { data: idea } = useSWR<Idea>(process.env.NEXT_PUBLIC_API_BASE_URL + `/idea/${id}`, fetcher);
 
@@ -60,7 +61,7 @@ export default function ClientPage({ id }: { id: string }) {
     console.log('Investment Data:', investmentData);
 
     try {
-      setIsLoading(true);
+      setIsLoadingInvestasi(true);
       const response = await fetch(process.env.NEXT_PUBLIC_API_BASE_URL + '/investor/post', {
         method: 'POST',
         headers: {
@@ -81,14 +82,18 @@ export default function ClientPage({ id }: { id: string }) {
       console.error('Error:', error);
       toast.error('Terjadi kesalahan. Silakan coba lagi.');
     } finally {
-      setIsLoading(false);
+      setIsLoadingInvestasi(false);
     }
   };
 
   if (!idea) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center">
-        <p>Memuat...</p>
+      <div className="max-w-3xl mx-auto px-4 mb-22 mt-10">
+        <div className="h-96 w-full bg-slate-200 animate-pulse rounded-md"></div>
+        <div className="h-20 mt-4 w-full bg-slate-200 animate-pulse rounded-md"></div>
+        <div className="h-4 mt-6 w-full bg-slate-200 animate-pulse rounded-md"></div>
+        <div className="h-4 mt-6 w-[80%] bg-slate-200 animate-pulse rounded-md"></div>
+        <div className="h-4 mt-6 w-[50%] bg-slate-200 animate-pulse rounded-md"></div>
       </div>
     );
   }
@@ -111,9 +116,9 @@ export default function ClientPage({ id }: { id: string }) {
           <p className="text-blue-600 bg-blue-600/10 px-4 py-1 rounded-full text-xs w-max">{idea.kategori}</p>
         </div>
         <h1 className="text-2xl font-semibold mt-4">{idea.title}</h1>
-        <p className="text-xs text-slate-600 mt-1">Dibuat {new Date(idea.created_at).toLocaleDateString('id-ID')}</p>
+        <p className="text-xs text-slate-600 mt-1">Dibuat {new Date(idea.created_at).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
         {owner && (
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mt-3">
             <div className="flex gap-3 mt-4">
               <Image src={owner.foto_profil} width={50} height={50} alt={owner.nama} unoptimized className="rounded-full w-10 h-10 object-cover" />
               <div>
@@ -129,7 +134,7 @@ export default function ClientPage({ id }: { id: string }) {
 
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle className='text-left'>Kontak</DialogTitle>
+                    <DialogTitle className="text-left">Kontak</DialogTitle>
                     <div className="mt-3 text-left">
                       <p>Email</p>
                       <p className="flex text-slate-600 gap-2 items-center mt-2">
@@ -162,7 +167,7 @@ export default function ClientPage({ id }: { id: string }) {
             {investorLength} Investor Terlibat
           </p>
         </div>
-        <p className="mt-4 leading-relaxed text-slate-600 whitespace-pre-wrap">{idea.description}</p>
+        <p className="mt-8 leading-relaxed text-slate-600 whitespace-pre-wrap">{idea.description}</p>
         <div>
           <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2">
             <Dialog>
@@ -171,38 +176,59 @@ export default function ClientPage({ id }: { id: string }) {
                   Ajukan Investasi <Send size={18} />
                 </DialogTrigger>
               )}
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Ajukan tawaran investasi</DialogTitle>
-                  <form onSubmit={handleSubmit(onSubmit)}>
-                    <Label htmlFor="amount" className="my-4">
-                      Jumlah Investasi
-                    </Label>
-                    <Input type="number" {...register('investasi', { required: 'Jumlah tawaran investasi wajib diisi' })} aria-invalid={errors.investasi && 'true'} id="amount" placeholder="Rp. 10.000.000" className="w-full" />
-                    {errors.investasi && <p className="text-xs text-red-500 mt-3">{errors.investasi.message}</p>}
-                    <Label htmlFor="message" className="my-4">
-                      Pesan (opsional)
-                    </Label>
-                    <Textarea id="message" {...register('note', { required: false })} placeholder="Tawaran investasi" className="w-full" aria-invalid={errors.note && 'true'} />
-                    <div className="flex gap-3 items-center justify-end mt-4 w-full">
-                      <DialogClose asChild>
-                        <Button variant={'secondary'} className="cursor-pointer w-24" type="button">
-                          Batal
+              {idUser ? (
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Ajukan tawaran investasi</DialogTitle>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      <Label htmlFor="amount" className="my-4">
+                        Jumlah Investasi
+                      </Label>
+                      <Input type="number" {...register('investasi', { required: 'Jumlah tawaran investasi wajib diisi' })} aria-invalid={errors.investasi && 'true'} id="amount" placeholder="Rp. 10.000.000" className="w-full" />
+                      {errors.investasi && <p className="text-xs text-red-500 mt-3">{errors.investasi.message}</p>}
+                      <Label htmlFor="message" className="my-4">
+                        Pesan (opsional)
+                      </Label>
+                      <Textarea id="message" {...register('note', { required: false })} placeholder="Tawaran investasi" className="w-full" aria-invalid={errors.note && 'true'} />
+                      <div className="flex gap-3 items-center justify-end mt-4 w-full">
+                        <DialogClose asChild>
+                          <Button variant={'secondary'} className="cursor-pointer w-24" type="button">
+                            Batal
+                          </Button>
+                        </DialogClose>
+                        <Button className="bg-blue-600 min-w-20 hover:bg-blue-500 w-24 cursor-pointer" type="submit" disabled={isLoadingInvestasi}>
+                          {isLoadingInvestasi ? (
+                            <span className="">
+                              <LoaderCircle className="animate-spin" />
+                            </span>
+                          ) : (
+                            'Kirim'
+                          )}
                         </Button>
-                      </DialogClose>
-                      <Button className="bg-blue-600 min-w-20 hover:bg-blue-500 w-24 cursor-pointer" type="submit" disabled={isLoading}>
-                        {isLoading ? (
-                          <span className="">
-                            <LoaderCircle className="animate-spin" />
-                          </span>
-                        ) : (
-                          'Kirim'
-                        )}
-                      </Button>
+                      </div>
+                    </form>
+                  </DialogHeader>
+                </DialogContent>
+              ) : (
+                <DialogContent>
+                  <DialogHeader>
+                    <div className="flex items-center flex-col">
+                      <Image src={'/restricted.png'} width={200} height={200} alt="restricteds" />
+                      <p className="text-sm text-slate-600 mt-3">Untuk melanjutkan masuk atau daftar akun terlebih dahulu ya!</p>
+                      <div className="mt-5 flex gap-4">
+                        <Link href={'/user/masuk'}>
+                          <Button className="bg-blue-600 hover:bg-blue-500 cursor-pointer">Masuk</Button>
+                        </Link>
+                        <Link href={'/user/masuk'}>
+                          <Button variant={'secondary'} className="cursor-pointer">
+                            Daftar
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
-                  </form>
-                </DialogHeader>
-              </DialogContent>
+                  </DialogHeader>
+                </DialogContent>
+              )}
             </Dialog>
           </div>
         </div>

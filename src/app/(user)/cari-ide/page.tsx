@@ -7,11 +7,13 @@ import { SearchIcon } from 'lucide-react';
 import React from 'react';
 import useSWR from 'swr';
 import { Idea } from '@/types/idea';
+import { Button } from '@/components/ui/button';
 
 export default function Page() {
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [visibleCount, setVisibleCount] = React.useState(6);
 
-  const { data: ideas } = useSWR<Idea[]>(process.env.NEXT_PUBLIC_API_BASE_URL + '/idea', fetcher);
+  const { data: ideas, isLoading } = useSWR<Idea[]>(process.env.NEXT_PUBLIC_API_BASE_URL + '/idea', fetcher);
 
   const [filteredIdeas, setFilteredIdeas] = React.useState<Idea[] | undefined>(ideas);
 
@@ -20,11 +22,16 @@ export default function Page() {
     setSearchTerm(value);
     const filtered = ideas?.filter((idea) => idea.title.toLowerCase().includes(value));
     setFilteredIdeas(filtered);
+    setVisibleCount(6);
   };
 
   React.useEffect(() => {
     setFilteredIdeas(ideas);
   }, [ideas]);
+
+  const handleSeeMore = () => {
+    setVisibleCount((prev) => prev + 6);
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4">
@@ -44,10 +51,26 @@ export default function Page() {
       </div>
 
       <section className="grid py-10 lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
-        {filteredIdeas?.map((ide) => (
+        {isLoading &&
+          [1, 2, 3].map((index) => (
+            <div key={index}>
+              <div className="bg-slate-200 rounded-md h-56 w-full animate-pulse"></div>
+              <div className="bg-slate-200 rounded-md h-14 w-full animate-pulse mt-4"></div>
+              <div className="bg-slate-200 rounded-md h-20 w-full animate-pulse mt-4"></div>
+            </div>
+          ))}
+        {filteredIdeas?.slice(0, visibleCount).map((ide) => (
           <IdeaCard ide={ide} key={ide.id} />
         ))}
       </section>
+
+      {filteredIdeas && visibleCount < filteredIdeas.length && (
+        <div className="text-center">
+          <Button onClick={handleSeeMore} className="cursor-pointer mb-10 rounded-full border-none" variant={'secondary'}>
+            Lebih banyak ide
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
