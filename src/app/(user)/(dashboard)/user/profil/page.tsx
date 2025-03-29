@@ -61,7 +61,7 @@ export default function Page() {
         throw new Error('Failed to update user');
       }
 
-      console.log(response)
+      console.log(response);
 
       const updatedData = await response.json();
       mutate(updatedData);
@@ -74,6 +74,17 @@ export default function Page() {
       setIsLoading(false);
     }
   };
+
+  if (!data?.is_active) {
+    return (
+      <div className="max-w-5xl h-[80vh] mx-auto px-4 flex justify-center items-center">
+        <div className="flex flex-col items-center">
+          <Image src={'/restricted-nonactive.png'} width={200} height={200} alt="restricteds" unoptimized />
+          <p className="text-sm text-slate-600 mt-3">Mohon maaf, akun anda belum aktif!</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl">
@@ -105,7 +116,7 @@ export default function Page() {
 
             <DialogContent>
               <DialogHeader>
-                <DialogTitle className='text-left'>Ubah Profil</DialogTitle>
+                <DialogTitle className="text-left">Ubah Profil</DialogTitle>
               </DialogHeader>
               <p>Apakah ada yakin merubah data anda?</p>
               <div className="flex gap-2 justify-end">

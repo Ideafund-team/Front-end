@@ -14,3 +14,4 @@ export type Idea = {
   created_at: string;
   updated_at: string;
 };
+

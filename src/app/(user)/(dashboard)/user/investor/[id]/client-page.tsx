@@ -116,6 +116,8 @@ export default function ClientPage({ id }: { id: string }) {
     if (investors.length) fetchPhotos();
   }, [investors]);
 
+  
+
   return (
     <div>
       <div className="">
@@ -130,7 +132,14 @@ export default function ClientPage({ id }: { id: string }) {
                 <div>
                   <PhotoProvider>
                     <PhotoView src={investorPhotos[invest.id_investor]}>
-                      <Image src={investorPhotos[invest.id_investor] || '/default-avatar.jpg'} width={134} height={100} alt={invest.nama_investor} className="rounded-md aspect-video max-sm:w-full sm:h-24 object-cover  cursor-pointer hover:brightness-75 transition-all duration-200" unoptimized />
+                      <Image
+                        src={investorPhotos[invest.id_investor] || '/default-avatar.jpg'}
+                        width={134}
+                        height={100}
+                        alt={invest.nama_investor}
+                        className="rounded-md aspect-video max-sm:w-full sm:h-24 object-cover  cursor-pointer hover:brightness-75 transition-all duration-200"
+                        unoptimized
+                      />
                     </PhotoView>
                   </PhotoProvider>
                 </div>

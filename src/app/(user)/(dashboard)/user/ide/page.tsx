@@ -4,16 +4,16 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { fetcher } from '@/lib/fetcher';
+import { Idea } from '@/types/idea';
+import Cookies from 'js-cookie';
 import { ChevronRight, Ellipsis, HandCoins, LoaderCircle, MapPin, Pencil, Plus, SearchIcon, Trash } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import Cookies from 'js-cookie';
-import useSWR from 'swr';
-import { fetcher } from '@/lib/fetcher';
-import { Idea } from '@/types/idea';
-import { toast } from 'sonner';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
+import { toast } from 'sonner';
+import useSWR from 'swr';
 
 export default function Page() {
   const [dialogOpen, setDialogOpen] = React.useState(false);
@@ -73,6 +73,19 @@ export default function Page() {
       setIsLoading(false);
     }
   };
+
+  const { data: user } = useSWR(userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/${userId}` : null, fetcher);
+
+  if (!user?.is_active) {
+    return (
+      <div className="max-w-5xl h-[80vh] mx-auto px-4 flex justify-center items-center">
+        <div className='flex flex-col items-center'>
+          <Image src={'/restricted-nonactive.png'} width={200} height={200} alt="restricteds" unoptimized/>
+          <p className="text-sm text-slate-600 mt-3">Mohon maaf, akun anda belum aktif!</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl">
@@ -151,7 +164,7 @@ export default function Page() {
                   <p className="text-xs font-medium">{ide.status === true ? 'Dibuka' : 'Ditutup'}</p>
                 </div>
               </div>
-              <p className="text-xl font-semibold mt-3">{ide.title}</p>
+              <p className="text-xl font-semibold mt-3">{ide.title} </p>
               <div className="flex gap-2 mt-2">
                 <p className="text-blue-600 bg-blue-600/10 px-4 py-1 rounded-full text-xs">{ide.kategori}</p>
               </div>
@@ -165,7 +178,20 @@ export default function Page() {
                   <MapPin size={16} /> {ide.location}
                 </p>
               </div>
-              <Link href={`/detail-ide/${ide.id}`} className="mt-5">
+              <p className="text-sm mt-6">
+                Status Verifikasi:{' '}
+                <span className="">
+                  {' '}
+                  {ide.created_at === ide.updated_at ? (
+                    <span className=" text-yellow-500 px-3 py-1 rounded-full">Menunggu Verifikasi</span>
+                  ) : ide.is_verified ? (
+                    <span className=" text-green-500 px-3 py-1 rounded-full">Diterima</span>
+                  ) : (
+                    <span className="py-1.5 text-red-500 p-2 rounded-full">Ditolak</span>
+                  )}
+                </span>
+              </p>
+              <Link href={`/user/ide/detail-ide/${ide.id}`} className="mt-5">
                 <Button className="bg-blue-600 mt-5 hover:bg-blue-500 cursor-pointer w-full">
                   Lihat Detail <ChevronRight />
                 </Button>

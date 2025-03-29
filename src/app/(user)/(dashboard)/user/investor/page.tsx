@@ -35,6 +35,19 @@ export default function Page() {
     }
   };
 
+  const { data: user } = useSWR(userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/${userId}` : null, fetcher);
+
+  if (!user?.is_active) {
+    return (
+      <div className="max-w-5xl h-[80vh] mx-auto px-4 flex justify-center items-center">
+        <div className="flex flex-col items-center">
+          <Image src={'/restricted-nonactive.png'} width={200} height={200} alt="restricteds" unoptimized />
+          <p className="text-sm text-slate-600 mt-3">Mohon maaf, akun anda belum aktif!</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-5xl">
       <div className="">

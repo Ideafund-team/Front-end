@@ -13,20 +13,26 @@ export default function Page() {
   const [searchTerm, setSearchTerm] = React.useState('');
   const [visibleCount, setVisibleCount] = React.useState(6);
 
-  const { data: ideas, isLoading } = useSWR<Idea[]>(process.env.NEXT_PUBLIC_API_BASE_URL + '/idea', fetcher);
+  const { data: ideas = [], isLoading } = useSWR<Idea[]>(process.env.NEXT_PUBLIC_API_BASE_URL + '/idea', fetcher);
 
-  const [filteredIdeas, setFilteredIdeas] = React.useState<Idea[] | undefined>(ideas);
+  const [filteredIdeas, setFilteredIdeas] = React.useState<Idea[] | undefined>([]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.toLowerCase();
     setSearchTerm(value);
-    const filtered = ideas?.filter((idea) => idea.title.toLowerCase().includes(value));
+    const filtered = ideas
+      ?.filter((idea) => idea.is_verified) // Filter hanya ide yang is_verified = true
+      .filter((idea) => idea.title.toLowerCase().includes(value));
     setFilteredIdeas(filtered);
     setVisibleCount(6);
   };
 
   React.useEffect(() => {
-    setFilteredIdeas(ideas);
+    if (ideas.length > 0) {
+      const verifiedIdeas = ideas.filter((idea) => idea.is_verified); // Filter hanya ide yang is_verified = true
+      const reversedIdeas = [...verifiedIdeas].reverse(); // Reverse the ideas array
+      setFilteredIdeas(reversedIdeas);
+    }
   }, [ideas]);
 
   const handleSeeMore = () => {

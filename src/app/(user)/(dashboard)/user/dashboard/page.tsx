@@ -7,6 +7,7 @@ import IdeaCard from '@/components/ui/idea-card';
 import { fetcher } from '@/lib/fetcher';
 import { Idea } from '@/types/idea';
 import useSWR from 'swr';
+import Image from 'next/image';
 
 export default function Page() {
   const userId = Cookies.get('userId');
@@ -14,6 +15,18 @@ export default function Page() {
   const { data: ideas } = useSWR(userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/getidowner/ide/${userId}` : null, fetcher);
   const { data: investors } = useSWR(userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/getinvestorbyowner/${userId}` : null, fetcher);
   const { data: investasi } = useSWR(userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/getallinvestor/allinvestor/${userId}` : null, fetcher);
+
+  if (!user?.is_active) {
+    return (
+      <div className="max-w-5xl h-[80vh] mx-auto px-4 flex justify-center items-center">
+        <div className="flex flex-col items-center">
+          <Image src={'/restricted.png'} width={200} height={200} alt="restricteds" unoptimized />
+          <p className="text-xl font-medium">Hallo!, Selamat Datang</p>
+          <p className="text-sm text-slate-600 mt-3 max-w-lg text-center">Untuk saat ini akun anda belum aktif, kami akan mengirim konfirmasi status akun anda melalui email yang sudah anda daftarkan</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl">
@@ -68,7 +81,7 @@ export default function Page() {
             ideas
               .slice(-3)
               .reverse()
-              .map((ide: Idea, index: number) => <IdeaCard key={index} ide={ide} />)}
+              .map((ide: Idea, index: number) => <IdeaCard key={index} ide={ide} linkDetail={`/user/ide/detail-ide/${ide.id}`} />)}
         </div>
       </div>
     </div>

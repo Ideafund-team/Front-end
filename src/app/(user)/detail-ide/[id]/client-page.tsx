@@ -86,6 +86,17 @@ export default function ClientPage({ id }: { id: string }) {
     }
   };
 
+  if (!idea?.is_verified) {
+    return (
+      <div className="max-w-5xl h-[80vh] mx-auto px-4 flex justify-center items-center">
+        <div className="flex flex-col items-center">
+          <Image src={'/restricted-nonactive.png'} width={200} height={200} alt="restricteds" unoptimized />
+          <p className="text-sm text-slate-600 mt-3">Mohon maaf, ide tidak tersedia!</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!idea) {
     return (
       <div className="max-w-3xl mx-auto px-4 mb-22 mt-10">
@@ -176,7 +187,7 @@ export default function ClientPage({ id }: { id: string }) {
                   Ajukan Investasi <Send size={18} />
                 </DialogTrigger>
               )}
-              {idUser ? (
+              {idUser && user?.is_active ? (
                 <DialogContent>
                   <DialogHeader>
                     <DialogTitle>Ajukan tawaran investasi</DialogTitle>
@@ -212,20 +223,27 @@ export default function ClientPage({ id }: { id: string }) {
               ) : (
                 <DialogContent>
                   <DialogHeader>
-                    <div className="flex items-center flex-col">
-                      <Image src={'/restricted.png'} width={200} height={200} alt="restricteds" />
-                      <p className="text-sm text-slate-600 mt-3">Untuk melanjutkan masuk atau daftar akun terlebih dahulu ya!</p>
-                      <div className="mt-5 flex gap-4">
-                        <Link href={'/user/masuk'}>
-                          <Button className="bg-blue-600 hover:bg-blue-500 cursor-pointer">Masuk</Button>
-                        </Link>
-                        <Link href={'/user/masuk'}>
-                          <Button variant={'secondary'} className="cursor-pointer">
-                            Daftar
-                          </Button>
-                        </Link>
+                    {!user?.is_active ? (
+                      <div className="flex items-center flex-col">
+                        <Image src={'/restricted-nonactive.png'} width={200} height={200} alt="restricteds" unoptimized />
+                        <p className="text-sm text-slate-600 mt-3">Mohon maaf, akun anda belum aktif!</p>
                       </div>
-                    </div>
+                    ) : (
+                      <div className="flex items-center flex-col">
+                        <Image src={'/restricted.png'} width={200} height={200} alt="restricteds" unoptimized />
+                        <p className="text-sm text-slate-600 mt-3">Untuk melanjutkan masuk atau daftar akun terlebih dahulu ya!</p>
+                        <div className="mt-5 flex gap-4">
+                          <Link href={'/user/masuk'}>
+                            <Button className="bg-blue-600 hover:bg-blue-500 cursor-pointer">Masuk</Button>
+                          </Link>
+                          <Link href={'/user/daftar'}>
+                            <Button variant={'secondary'} className="cursor-pointer">
+                              Daftar
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                    )}
                   </DialogHeader>
                 </DialogContent>
               )}

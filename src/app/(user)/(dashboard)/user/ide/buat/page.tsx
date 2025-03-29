@@ -5,12 +5,15 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
+import { fetcher } from '@/lib/fetcher';
 import Cookies from 'js-cookie';
 import { LoaderCircle } from 'lucide-react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import useSWR from 'swr';
 
 type Idea = {
   title: string;
@@ -74,6 +77,21 @@ export default function Page() {
       setIsLoading(false);
     }
   };
+
+  const userId = Cookies.get('userId');
+
+  const { data: user } = useSWR(userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/${userId}` : null, fetcher);
+
+  if (!user?.is_active) {
+    return (
+      <div className="max-w-5xl h-[80vh] mx-auto px-4 flex justify-center items-center">
+        <div className="flex flex-col items-center">
+          <Image src={'/restricted-nonactive.png'} width={200} height={200} alt="restricteds" unoptimized />
+          <p className="text-sm text-slate-600 mt-3">Mohon maaf, akun anda belum aktif!</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl">
