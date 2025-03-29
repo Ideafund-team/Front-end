@@ -223,7 +223,7 @@ export default function ClientPage({ id }: { id: string }) {
               ) : (
                 <DialogContent>
                   <DialogHeader>
-                    {!user?.is_active ? (
+                    {idUser && !user?.is_active ? (
                       <div className="flex items-center flex-col">
                         <Image src={'/restricted-nonactive.png'} width={200} height={200} alt="restricteds" unoptimized />
                         <p className="text-sm text-slate-600 mt-3">Mohon maaf, akun anda belum aktif!</p>
