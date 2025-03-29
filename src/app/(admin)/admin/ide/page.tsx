@@ -168,7 +168,7 @@ export default function Page() {
                         </Button>
                       </DropdownMenuItem>
                       <DropdownMenuItem className="w-max">
-                        <Link href={`/admin/user/ide/detail-ide/${ide.id}`}>
+                        <Link href={`/admin/ide/detail-ide/${ide.id}`}>
                           <Button className="bg-green-500 hover:bg-green-400 cursor-pointer w-full">
                             {' '}
                             <Eye className="text-white" />
