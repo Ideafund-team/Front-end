@@ -86,16 +86,6 @@ export default function ClientPage({ id }: { id: string }) {
     }
   };
 
-  if (!idea?.is_verified) {
-    return (
-      <div className="max-w-5xl h-[80vh] mx-auto px-4 flex justify-center items-center">
-        <div className="flex flex-col items-center">
-          <Image src={'/restricted-nonactive.png'} width={200} height={200} alt="restricteds" unoptimized />
-          <p className="text-sm text-slate-600 mt-3">Mohon maaf, ide tidak tersedia!</p>
-        </div>
-      </div>
-    );
-  }
 
   if (!idea) {
     return (
@@ -105,6 +95,17 @@ export default function ClientPage({ id }: { id: string }) {
         <div className="h-4 mt-6 w-full bg-slate-200 animate-pulse rounded-md"></div>
         <div className="h-4 mt-6 w-[80%] bg-slate-200 animate-pulse rounded-md"></div>
         <div className="h-4 mt-6 w-[50%] bg-slate-200 animate-pulse rounded-md"></div>
+      </div>
+    );
+  }
+
+  if (!idea?.is_verified) {
+    return (
+      <div className="max-w-5xl h-[80vh] mx-auto px-4 flex justify-center items-center">
+        <div className="flex flex-col items-center">
+          <Image src={'/restricted-nonactive.png'} width={200} height={200} alt="restricteds" unoptimized />
+          <p className="text-sm text-slate-600 mt-3">Mohon maaf, ide tidak tersedia!</p>
+        </div>
       </div>
     );
   }
