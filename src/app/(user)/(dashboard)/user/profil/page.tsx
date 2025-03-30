@@ -75,6 +75,16 @@ export default function Page() {
     }
   };
 
+  if (!data) {
+    return (
+      <div className="max-w-5xl w-full h-[80vh] mx-auto flex justify-center items-center">
+        <p className="flex text-sm gap-2 items-center text-slate-500">
+          <LoaderCircle size={18} className="animate-spin" /> Memuat...
+        </p>
+      </div>
+    );
+  }
+
   if (!data?.is_active) {
     return (
       <div className="max-w-5xl h-[80vh] mx-auto px-4 flex justify-center items-center">

@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { fetcher } from '@/lib/fetcher';
 import { Idea } from '@/types/idea';
 import Cookies from 'js-cookie';
-import { ChevronRight, HandCoins, MapPin, Plus, SearchIcon } from 'lucide-react';
+import { ChevronRight, HandCoins, LoaderCircle, MapPin, Plus, SearchIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -36,6 +36,16 @@ export default function Page() {
   };
 
   const { data: user } = useSWR(userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/${userId}` : null, fetcher);
+
+  if (!user) {
+    return (
+      <div className="max-w-5xl w-full h-[80vh] mx-auto flex justify-center items-center">
+        <p className="flex text-sm gap-2 items-center text-slate-500">
+          <LoaderCircle size={18} className="animate-spin" /> Memuat...
+        </p>
+      </div>
+    );
+  }
 
   if (!user?.is_active) {
     return (

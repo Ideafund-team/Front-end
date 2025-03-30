@@ -1,7 +1,7 @@
 'use client';
 
 import Cookies from 'js-cookie';
-import { HandCoins, Lightbulb, WalletMinimal } from 'lucide-react';
+import { HandCoins, Lightbulb, WalletMinimal, LoaderCircle } from 'lucide-react';
 
 import IdeaCard from '@/components/ui/idea-card';
 import { fetcher } from '@/lib/fetcher';
@@ -16,7 +16,17 @@ export default function Page() {
   const { data: investors } = useSWR(userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/getinvestorbyowner/${userId}` : null, fetcher);
   const { data: investasi } = useSWR(userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/getallinvestor/allinvestor/${userId}` : null, fetcher);
 
-  if (!user?.is_active) {
+  if (!user) {
+    return (
+      <div className="max-w-5xl w-full h-[80vh] mx-auto flex justify-center items-center">
+        <p className="flex text-sm gap-2 items-center text-slate-500">
+          <LoaderCircle size={18} className="animate-spin" /> Memuat...
+        </p>
+      </div>
+    );
+  }
+
+  if (!user.is_active) {
     return (
       <div className="max-w-5xl h-[80vh] mx-auto px-4 flex justify-center items-center">
         <div className="flex flex-col items-center">

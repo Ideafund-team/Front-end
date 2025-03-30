@@ -8,7 +8,7 @@ import { fetcher } from '@/lib/fetcher';
 import useSWR from 'swr';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, LoaderCircle } from 'lucide-react';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 
 interface Investor {
@@ -77,6 +77,16 @@ export default function Page() {
   }, [investor]);
 
   const { data: user } = useSWR(userId ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/${userId}` : null, fetcher);
+
+  if (!user) {
+    return (
+      <div className="max-w-5xl w-full h-[80vh] mx-auto flex justify-center items-center">
+        <p className="flex text-sm gap-2 items-center text-slate-500">
+          <LoaderCircle size={18} className="animate-spin" /> Memuat...
+        </p>
+      </div>
+    );
+  }
 
   if (!user?.is_active) {
     return (
